@@ -40,7 +40,7 @@ with gr.Blocks(title="Hiring agent 🎞️🍿",css=text_css ) as demo :
     chatbot = gr.Chatbot(label="WebGPT")
     state = gr.State([])
     with gr.Row():
-        txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter").style(container=False)
+        txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter")
     try:
         txt.submit(evaluate_candidate, [txt, state], [chatbot, state])
     except Exception as ex:
