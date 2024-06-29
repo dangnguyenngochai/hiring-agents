@@ -1,8 +1,5 @@
 import os
-from embedding import (
-    EncodedApiDocVectorStore,
-    test_run as dummy_emb,
-    )
+from embedding_docs import EncodedDocVectorStore, test_run as dummy_emb
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -68,7 +65,7 @@ def prompt_generator(mode):
         return prompt
         
         
-def generate_response(input: str, state: str, vstore_jd: EncodedApiDocVectorStore, vstore_res: EncodedApiDocVectorStore): 
+def generate_response(input: str, state: str, vstore_jd: EncodedDocVectorStore, vstore_res: EncodedDocVectorStore): 
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
     
