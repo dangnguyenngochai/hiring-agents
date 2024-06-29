@@ -40,7 +40,7 @@ with gr.Blocks(title="Hiring agent 🎞️🍿",css=text_css ) as demo :
     chatbot = gr.Chatbot(label="WebGPT")
     state = gr.State([])
     with gr.Row():
-        txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter").style(container=False)
+        txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter")
     try:
         txt.submit(evaluate_candidate, [txt, state], [chatbot, state])
     except Exception as ex:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     
     qdrant_client = QdrantClient(location=":memory:")
     vstore_jd = EncodedDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
-    jd_path = os.path.join(data_path, 'jd'),
+    jd_path = os.path.join([data_path, 'jd']),
 
     for file in os.listdir(jd_path):
         path = os.path.join(jd_path, file)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     collection_name = 'resume'
     vstore_candidate = EncodedDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
-    resume_path = os.path.join(data_path, 'resume')
+    resume_path = os.path.join([data_path, 'resume'])
 
     for file in os.listdir(resume_path):
         path = os.path.join(resume_path, file)
