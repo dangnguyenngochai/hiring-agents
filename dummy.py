@@ -1,6 +1,5 @@
 # import test
 from test import print_hello
-from test import world
 
 import sys
 
