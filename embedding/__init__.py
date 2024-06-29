@@ -1,5 +1,5 @@
 from . import api_loader
-from . import embedding_api_docs
+from . import embeddings_docs
 
-from .embedding_api_docs import EncodedApiDocVectorStore
-from .embedding_api_docs import test_run
+from .embeddings_docs import EncodedApiDocVectorStore
+from .embeddings_docs import test_run

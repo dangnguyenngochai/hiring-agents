@@ -10,7 +10,7 @@ import pathlib
 # don't use relative import to save yourself from headache
 from .api_loader import (
     YamlLoader, 
-    JsonLoader
+    JsonLoader,
 )
 
 class EncodedDocVectorStore:
