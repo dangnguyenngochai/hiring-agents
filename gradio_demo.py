@@ -5,24 +5,26 @@ import gradio_app
 from gradio_app.theme import minigptlv_style, custom_css,text_css
 
 from config import EMB_MODEL
-from main import (
-    run
-)
+
+from embedding_docs import EncodedApiDocVectorStore
+import retrieval_text
 
 from qdrant_client import QdrantClient
 
-sys.path.append('embedding')
-sys.path.append('retrieval_generation')
-
-from embedding import EncodedApiDocVectorStore
+sys.path.append('/embedding')
+sys.path.append('/retrieval_generation')
 
 import argparse
 
 DEMO_VSTORE_JD = None
 DEMO_VSTORE_RE = None
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--mode', type=str, default='test')  
+parser = argparse.ArgumentParser()
+parser.add_argument('--mode', type=str, default='test')  
+
+def run(input, state, vstore_jd, vstore_res):
+    response = retrieval_text.generate_response(input, state, vstore_jd, vstore_res)
+    return response
 
 def evaluate_candidate(ans, state):
     resp = run(ans, state, DEMO_VSTORE_JD, DEMO_VSTORE_RE)
@@ -45,7 +47,7 @@ with gr.Blocks(title="Hiring agent 🎞️🍿",css=text_css ) as demo :
         print(ex)
        
 if __name__ == "__main__":
-    # args = parser.parse_args()
+    args = parser.parse_args()
     data_path = 'data'
         
     print("Setting things up....")

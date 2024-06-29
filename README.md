@@ -1,3 +1,3 @@
 HOW TO RUN THE DEMO
 
-- Please run the notebook `demo.ipynb` in your local
+- Please run the following colab notebook.
