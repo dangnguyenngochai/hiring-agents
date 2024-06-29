@@ -59,7 +59,7 @@ if __name__ == "__main__":
     
     qdrant_client = QdrantClient(location=":memory:")
     vstore_jd = EncodedDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
-    jd_path = os.path.join(data_path, 'jd'),
+    jd_path = os.path.join(data_path, 'jd')
 
     for file in os.listdir(jd_path):
         path = os.path.join(jd_path, file)
