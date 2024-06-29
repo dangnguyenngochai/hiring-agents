@@ -11,8 +11,8 @@ from main import (
 
 from qdrant_client import QdrantClient
 
-sys.path.append('/embedding')
-sys.path.append('/retrieval_generation')
+sys.path.append('embedding')
+sys.path.append('retrieval_generation')
 
 from embedding import EncodedApiDocVectorStore
 
