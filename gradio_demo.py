@@ -6,7 +6,7 @@ from gradio_app.theme import minigptlv_style, custom_css,text_css
 
 from config import EMB_MODEL
 
-from embedding_docs import EncodedApiDocVectorStore
+from embedding_docs import EncodedDocVectorStore
 import retrieval_text
 
 from qdrant_client import QdrantClient
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     collection_name = 'job_description'
     
     qdrant_client = QdrantClient(location=":memory:")
-    vstore_jd = EncodedApiDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
+    vstore_jd = EncodedDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
     jd_path = os.path.join(data_path, 'jd'),
 
     for file in os.listdir(jd_path):
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         vstore_jd.embeddings_docs(path, collection_name)
 
     collection_name = 'resume'
-    vstore_candidate = EncodedApiDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
+    vstore_candidate = EncodedDocVectorStore(collection_name=collection_name, qdrant_client=qdrant_client, model=EMB_MODEL)
     resume_path = os.path.join(data_path, 'resume')
 
     for file in os.listdir(resume_path):
