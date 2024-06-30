@@ -7,3 +7,5 @@ HOW TO RUN THE DEMO
 2 . Start gradio app
 
     `python gradio_demo.py`
+
+or just run this (colab noteboook)[https://colab.research.google.com/drive/1dYT26VNE7JQnwmsRRHmsbGMxXCcUm8Yg?usp=sharing]
