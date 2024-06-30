@@ -9,8 +9,9 @@ from embedding import (
     embedding_api_docs
 )
 
+import  langchain_community
 import retrieval_generation
-from retrieval_generation import retrieval_text
+from . import retrieval_text
 
 # from embeddings_api_docs import test_run
 # from retrieval_generation import test_run2

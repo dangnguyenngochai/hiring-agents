@@ -1,1 +1,17 @@
-THIS IS A DEMO JOB DESCRIPTION FOR TESTING ONLY
+### Job brief
+We are seeking an AI Engineer to join our dynamic team and contribute to the development and enhancement of our AI-driven platforms. The ideal candidate will possess deep technical expertise in machine learning and artificial intelligence, with a proven track record of developing scalable AI solutions.
+
+Your role will involve everything from data analysis and model building to integration and deployment, ensuring our AI initiatives drive substantial business impact.
+
+### Responsibilities
+Develop machine learning models and AI solutions
+Test, deploy, and maintain AI systems
+Collaborate with data scientists and other engineers to integrate AI into broader system architectures
+Stay current with AI trends and suggest improvements to existing systems and workflows
+
+### Requirements and skills
+Degree in Computer Science, Engineering, or related field
+Experience with machine learning, deep learning, NLP, and computer vision
+Proficiency in Python, Java, and R
+Strong knowledge of AI frameworks such as TensorFlow or PyTorch
+Excellent problem-solving skills and ability to work in a team environment

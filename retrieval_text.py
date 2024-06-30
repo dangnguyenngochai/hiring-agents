@@ -1,9 +1,10 @@
 import os
 from embedding_docs import EncodedDocVectorStore, test_run as dummy_emb
 
+from operator import itemgetter
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 # from langchain_google_genai import (
 #     ChatGoogleGenerativeAI
 # )
@@ -15,7 +16,6 @@ langchain.debug=True
 
 # os.environ["OPENAI_API_KEY"] = 'sk-proj-0VuYdXfFXk6evfzOzLJTT3BlbkFJcshpzLyIT1ij7tR8q11Q'
 # os.environ["GOOGLE_API_KEY"] = 'AIzaSyB-PQLnrQm2Z5UGXW28R24TXG99MLPICFw'
-os.environ['COHERE_API_KEY'] = 'OhqrR0Bude8zr30XWVjreKC4LNbNHPhivxw7n0Vw'
 
 def prompt_generator(mode):
     if mode=='questioner':
@@ -25,8 +25,10 @@ def prompt_generator(mode):
         and the candidate has the resume in the RESUME section.
         Using information provided by the evaluator in EVALUATOR ANALYSIS on the their latest answers, \
         you need to come up with the follow up questions in the following topics: \
-        technical question behavioral questions, and questions related to the candidate's past experience using the candidate RESUME
         
+        technical question behavioral questions, \
+        and questions related to the candidate's past experience using the candidate RESUME.
+
         JOB DESCRIPTION:
         {jd}
         RESUME:
@@ -34,11 +36,12 @@ def prompt_generator(mode):
         EVALUATOR ANALYSIS:
         {eval}
         """
+        
         prompt = ChatPromptTemplate.from_messages([
-            ('system', sys_message),
-            ('human', "QUENSTION:\n{question}")
-            ]
-        )
+            ("system",sys_message),
+            ("ai", "Please answer the following question"),
+            ("human", "Yes")
+        ])
         return prompt
     
     elif mode=='evaluator':
@@ -58,17 +61,21 @@ def prompt_generator(mode):
         CANDIDATE ANSWER:
         {ca}
         """
-        prompt = ChatPromptTemplate.from_messages([
-            ('system', sys_message),
-            ]
-        )
+        prompt = PromptTemplate.from_template(sys_message)
         return prompt
         
         
-def generate_response(input: str, state: str, vstore_jd: EncodedDocVectorStore, vstore_res: EncodedDocVectorStore): 
+def generate_response(input: str, chat_history: list, vstore_jd: EncodedDocVectorStore, vstore_res: EncodedDocVectorStore): 
     def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
-    
+        output =  "\n\n".join(doc.page_content for doc in docs)
+        print(output)
+        return output
+
+    # for simplicity, get the last question only
+    def get_interviewer_question(chat_history):
+        last_topic = chat_history[-1]
+        return last_topic[-1]
+
     # fetch prompt template
     # prompt = hub.pull("rlm/rag-prompt")
 
@@ -78,36 +85,38 @@ def generate_response(input: str, state: str, vstore_jd: EncodedDocVectorStore, 
     retriever_jd = vstore_jd.get_retriever(5) # retrieve with meta data
     retriever_re = vstore_res.get_retriever(5) # retrieve with meta data
     
-    jd_chunks = retriever_jd.get_relevant_documents(input)
-    re_chunks = retriever_re.get_relevant_documents(input)
-
     llm = ChatCohere(model="command-r-plus")
+
     rag_chain = (
-        {"jd": jd_chunks | format_docs,
-         "re": re_chunks | format_docs,
-         "iq": state,
-         "ca": input}
+        {"jd": itemgetter('input') | retriever_jd | format_docs,
+         "re": itemgetter('input') | retriever_re | format_docs,
+         "iq": itemgetter('state'),
+         "ca": itemgetter('input')}
         | prompt
-        | llm
+        | llm   
         | StrOutputParser()
     )
     
-    eval_response = rag_chain.invoke()
+    eval_response = rag_chain.invoke({'state': get_interviewer_question(chat_history), 'input': input})
+
+    print(eval_response)
 
     mode = 'questioner'
     prompt = prompt_generator(mode)
+
     llm = ChatCohere(model="command-r")
+
     summary_chain = (
-        {"jd": jd_chunks | format_docs,
-         "re": re_chunks | format_docs,
-         "eval": eval_response
+        {"jd": retriever_jd | format_docs, 
+         "re": retriever_re | format_docs,
+         "eval": RunnablePassthrough()
         }
         | prompt
         | llm
         | StrOutputParser()
     )
-    questioner_response = summary_chain.invoke()
-    
+    questioner_response = summary_chain.invoke(eval_response)
+
     return questioner_response
 
 def test_run2():
