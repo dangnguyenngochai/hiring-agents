@@ -8,4 +8,4 @@ HOW TO RUN THE DEMO
 
     `python gradio_demo.py`
 
-or just run this [colab notebook](!https://colab.research.google.com/drive/1dYT26VNE7JQnwmsRRHmsbGMxXCcUm8Yg?usp=sharing)
+or just run this [colab notebook](https://colab.research.google.com/drive/1dYT26VNE7JQnwmsRRHmsbGMxXCcUm8Yg?usp=sharing)
